@@ -1,3 +1,7 @@
+
+
+
+
 let input_file = Sys.argv.(1)
 let _ =
   if not (Filename.check_suffix input_file ".var") then

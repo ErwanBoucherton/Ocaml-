@@ -33,8 +33,7 @@ let rec translate_instruction = function
   | CLLInstr.If(e,s1,s2) ->  [ IMPInstr.If(e,translate_sequence s1,translate_sequence s2) ]
   | CLLInstr.While(e,s ) -> [ IMPInstr.While(e,translate_sequence s)  ]
   | CLLInstr.Write(e1,e2) -> [IMPInstr.Write(e1,e2)]
-  | _ -> (* autres cas simples à traiter de même *)
-failwith "not implemented"
+
 
   (* Instruction d'appel, dont la traduction va contenir toutes les étapes
      du protocole à réaliser par l'appelant. *)
