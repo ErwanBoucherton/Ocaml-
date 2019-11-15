@@ -2,8 +2,16 @@ open FUNInstr
 
 (* Remplace les références à des variables locales par les calculs
    d'adresse *)
-let rec translate_expression expr alloc_table =
-  failwith "not implemented"
+let rec translate_expression expr alloc_table = match expr with
+  | IMPExpr.Immediate(i) -> IMPExpr.Immediate(i)
+  | IMPExpr.Name(e) -> 
+    if Hashtbl.mem alloc_table e then
+      IMPExpr.(Binop(Op.Sub, Deref(Name "frame_pointer"), Immediate(Hashtbl.find alloc_table e)))
+    else
+      IMPExpr.Name(e)
+  | IMPExpr.Unop(u, e) -> IMPExpr.Unop(u, translate_expression e alloc_table)
+  | IMPExpr.Binop(b, e1, e2) -> IMPExpr.Binop(b, translate_expression e1 alloc_table, translate_expression e2 alloc_table)
+  | IMPExpr.Deref(e) -> IMPExpr.Deref(translate_expression e alloc_table)
 
 
 (* Instructions et séquences : traduction iso *)
@@ -38,7 +46,17 @@ and translate_sequence seq alloc_table =
 
 (* Ajoute au code habituel l'initialisation des variables locales *)
 let translate_function_definition fdef =
-  failwith "not implemented"
+  let pile = ref [] in
+  let alloc_table = Hashtbl.create 17 in
+
+  List.iteri 
+    (fun i e -> 
+      Hashtbl.add alloc_table (fst e) (i+1);
+      pile := !pile @ (FUNInstr.push (IMPExpr.Immediate(snd e))) ) VAR.(fdef.locals);
+  
+  { FUN.name = VAR.(fdef.name);
+    FUN.code = !pile @ (translate_sequence VAR.(fdef.code) alloc_table);
+    FUN.parameters = VAR.(fdef.parameters)}
   
 
 let translate_program prog =

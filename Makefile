@@ -23,7 +23,7 @@ VARCompiler:
 	ocamlc -c CLLtoIMP.ml
 	
 	
-	ocamlc -o VARCompiler Op.ml IMPExpr.ml IMPInstr.ml ART.ml IMP.ml FUNtoCLL.ml FUNInstr.ml FUN.ml CLLtoIMP.ml CLLInstr.ml CLL.ml VARtoFUN.ml VARLexer.ml VARParser.ml VARCompiler.ml
+	ocamlc -o VARCompiler Op.ml IMPExpr.ml CLLInstr.ml  IMPInstr.ml ART.ml IMP.ml FUNtoCLL.ml FUNInstr.ml FUN.ml CLLtoIMP.ml  CLL.ml VARtoFUN.ml VARLexer.ml VARParser.ml VARCompiler.ml
 
 clean:
 	rm -rf *.cmi *.cmx *.cmo *.o *a.out *.conflicts *.automaton VARLexer.ml VARParser.ml VARParser.mli VARCompiler
